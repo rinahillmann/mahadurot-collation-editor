@@ -69,7 +69,7 @@ Annotations are saved automatically in your browser's local storage, keyed to th
 
 ## From annotations to a stemma
 
-The current stemmatic network is computed from agreement rates across all variant loci. Once you have annotated the loci, export your JSON and the agreement rates can be recomputed using **only the significant loci** — this filtered stemma reflects genuine textual affinity rather than scribal noise. See the companion Python tool (...).
+The current stemmatic network is computed from agreement rates across all variant loci. Once you have annotated the loci, export your JSON and the agreement rates can be recomputed using **only the significant loci**. See the companion Python tool (...).
 
 ---
 
