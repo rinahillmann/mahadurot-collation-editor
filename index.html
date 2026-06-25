@@ -78,7 +78,7 @@ body { font-family: Georgia, serif; background: #faf9f7; color: #2c2825; font-si
 
 /* ── Main layout ── */
 #collation-panel { display: flex; flex: 1; overflow: hidden; }
-#stemma-panel    { display: none; flex: 1; overflow: hidden; position: relative; }
+#Relation Network-panel    { display: none; flex: 1; overflow: hidden; position: relative; }
 
 #loci-main { flex: 1; padding: 16px 20px; overflow-y: auto; }
 #sidebar {
@@ -162,9 +162,9 @@ tr:nth-child(even) { background: #f5f3f0; }
 }
 .corr-row { opacity: .65; font-style: italic; }
 
-/* ── Stemma ── */
-#stemma-svg-wrap { width: 100%; height: 100%; }
-svg.stemma { width: 100%; height: 100%; }
+/* ── Relation Network ── */
+#Relation Network-svg-wrap { width: 100%; height: 100%; }
+svg.Relation Network { width: 100%; height: 100%; }
 .node circle { cursor: pointer; stroke: #fff; stroke-width: 2.5; }
 .node text {
   pointer-events: none; font-family: monospace; font-weight: bold;
@@ -176,7 +176,7 @@ svg.stemma { width: 100%; height: 100%; }
   border-radius: 6px; font-size: .76rem; pointer-events: none; opacity: 0;
   transition: opacity .15s; max-width: 220px; line-height: 1.5;
 }
-#stemma-sidebar {
+#Relation Network-sidebar {
   width: 270px; background: #fff; border-left: 1px solid #e2ddd6;
   padding: 16px; overflow-y: auto; font-size: .8rem; flex-shrink: 0;
 }
@@ -199,7 +199,7 @@ svg.stemma { width: 100%; height: 100%; }
 #thr-wrap { margin-top: 12px; }
 #thr-wrap label { font-size: .76rem; color: #7a736c; display: block; margin-bottom: 4px; }
 #thr { width: 100%; accent-color: #2c4a3e; }
-.stemma-note {
+.Relation Network-note {
   font-size: .72rem; color: #9d9087; margin-top: 14px; line-height: 1.5;
   border-top: 1px solid #e2ddd6; padding-top: 10px;
 }
@@ -237,7 +237,7 @@ svg.stemma { width: 100%; height: 100%; }
 
   <div id="tabs">
     <button class="tab active" onclick="showTab('collation', this)">Collation</button>
-    <button class="tab" onclick="showTab('stemma', this)">Stemma</button>
+    <button class="tab" onclick="showTab('Relation Network', this)">Relation Network</button>
   </div>
 
   <div id="annot-toolbar">
@@ -288,7 +288,7 @@ svg.stemma { width: 100%; height: 100%; }
     </div>
   </div>
 
-  <!-- Stemma tab -->
+  <!-- Relation Network tab -->
   <div id="stemma-panel">
     <div id="stemma-svg-wrap" style="flex:1;position:relative;">
       <svg class="stemma" id="stemma-svg"></svg>
@@ -622,11 +622,11 @@ function renderSidebar(symbols, labels, corrigenda, pairs, singletons, splits, n
   ).join('') || '<tr><td style="color:#aaa">None</td></tr>';
 }
 
-// ══════════════════════════════════════════════════════════ STEMMA
+// ══════════════════════════════════════════════════════════ Relation Network
 
 let simRef = null, linkSelRef = null, nodeLoci = 0;
 
-function buildStemma(symbols, labels, corrigenda, pairs, singletons, nLoci) {
+function buildRelation Network(symbols, labels, corrigenda, pairs, singletons, nLoci) {
   nodeLoci = nLoci;
   const active = symbols.filter(s => !corrigenda.has(s));
 
@@ -652,12 +652,12 @@ function buildStemma(symbols, labels, corrigenda, pairs, singletons, nLoci) {
 
   // Legend
   const seenGrps = [...new Set(active.map(grp))].sort();
-  document.getElementById('stemma-legend').innerHTML = seenGrps.map(g =>
+  document.getElementById('Relation Network-legend').innerHTML = seenGrps.map(g =>
     `<div class="legend-item"><div class="legend-dot" style="background:${grpColor[g]}"></div><span>${grpLabel[g]}</span></div>`
   ).join('');
 
   // MS list
-  document.getElementById('stemma-ms-list').innerHTML = [...active]
+  document.getElementById('Relation Network-ms-list').innerHTML = [...active]
     .sort((a,b) => (singletons[a]||0)-(singletons[b]||0))
     .map(s => {
       const n   = singletons[s]||0;
@@ -672,8 +672,8 @@ function buildStemma(symbols, labels, corrigenda, pairs, singletons, nLoci) {
     }).join('');
 
   // D3 force graph
-  const wrap = document.getElementById('stemma-svg-wrap');
-  const svg  = d3.select('#stemma-svg');
+  const wrap = document.getElementById('Relation Network-svg-wrap');
+  const svg  = d3.select('#Relation Network-svg');
   svg.selectAll('*').remove();
 
   let W = wrap.clientWidth, H = wrap.clientHeight;
@@ -685,7 +685,7 @@ function buildStemma(symbols, labels, corrigenda, pairs, singletons, nLoci) {
   });
 
   const g     = svg.append('g');
-  const tip   = document.getElementById('stemma-tip');
+  const tip   = document.getElementById('Relation Network-tip');
   const agCol = d3.scaleSequential().domain([0.4,1.0]).interpolator(d3.interpolateRdYlGn);
 
   svg.call(d3.zoom().scaleExtent([0.3,4]).on('zoom', e => g.attr('transform', e.transform)));
@@ -889,8 +889,8 @@ function showTab(name, btn) {
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('collation-panel').style.display = name==='collation' ? 'flex' : 'none';
-  document.getElementById('stemma-panel').style.display    = name==='stemma'    ? 'flex' : 'none';
-  if (name==='stemma') {
+  document.getElementById('Relation Network-panel').style.display    = name==='Relation Network'    ? 'flex' : 'none';
+  if (name==='Relation Network') {
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
       if (simRef) simRef.alpha(0.3).restart();
@@ -931,7 +931,7 @@ function processFile(text, filename) {
     // Render
     renderLoci(loci, labels, corrigenda);
     renderSidebar(symbols, labels, corrigenda, pairs, singletons, splits, loci.length);
-    buildStemma(symbols, labels, corrigenda, pairs, singletons, loci.length);
+    buildRelation Network(symbols, labels, corrigenda, pairs, singletons, loci.length);
 
     // Filter count labels
     document.querySelector('.filter-btn').textContent = `All (${loci.length})`;
@@ -946,7 +946,7 @@ function processFile(text, filename) {
     // Reset to collation tab
     document.querySelectorAll('.tab').forEach((b,i) => b.classList.toggle('active', i===0));
     document.getElementById('collation-panel').style.display = 'flex';
-    document.getElementById('stemma-panel').style.display    = 'none';
+    document.getElementById('Relation Network-panel').style.display    = 'none';
 
   } catch(err) {
     document.getElementById('error-msg').textContent = 'Error: ' + err.message;
