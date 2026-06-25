@@ -891,8 +891,10 @@ function showTab(name, btn) {
   document.getElementById('collation-panel').style.display = name==='collation' ? 'flex' : 'none';
   document.getElementById('stemma-panel').style.display    = name==='stemma'    ? 'flex' : 'none';
   if (name==='stemma') {
-    window.dispatchEvent(new Event('resize'));
-    if (simRef) simRef.alpha(0.3).restart();
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+      if (simRef) simRef.alpha(0.3).restart();
+    }, 50);
   }
 }
 
