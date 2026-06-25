@@ -1,6 +1,6 @@
 # Mahadurot Collation Editor
 
-An interactive, browser-based collation tool for critical editions in the [Mahadurot](https://www.mahadurot.com) format. Upload a Mahadurot `.txt` file and instantly generate a collation sheet with variant loci, pairwise agreement statistics, a stemmatic network, and annotation tools — no installation or server required.
+An interactive, browser-based collation tool for critical editions in the [Mahadurot](https://www.mahadurot.com) format. Upload a Mahadurot `.txt` file and instantly generate a collation sheet with variant loci, pairwise agreement statistics, a stemmatic network, and annotation tools.
 
 **Live tool:** [rinahillmann.github.io/mahadurot-collation-editor](https://rinahillmann.github.io/mahadurot-collation-editor/)
 
