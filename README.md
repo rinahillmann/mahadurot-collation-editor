@@ -79,6 +79,7 @@ The same collation logic is available as a Python script for batch processing an
 
 ```bash
 python3 mahadurot_collator.py edition.txt output.html
+# produces output.html (collation) and output_stemma.html (stemma graph)
 ```
 
 See [`mahadurot_collator.py`](https://github.com/rinahillmann/mahadurot-collation-editor/blob/main/scripts/mahadurot_collator.py) for the full toolkit.
