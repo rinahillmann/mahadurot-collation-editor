@@ -295,6 +295,33 @@ svg.Relation Network { width: 100%; height: 100%; }
       <div class="tooltip" id="stemma-tip"></div>
     </div>
     <div id="stemma-sidebar">
+      <div id="network-filter" style="margin-bottom:14px;">
+  <div style="font-size:.72rem;color:#7a736c;margin-bottom:6px;font-weight:bold;text-transform:uppercase;letter-spacing:.05em;">Include loci</div>
+  <label style="display:block;font-size:.76rem;margin-bottom:4px;cursor:pointer;">
+    <input type="radio" name="netfilter" value="all" checked onchange="recomputeNetwork(this.value)"> All differences
+  </label>
+  <label style="display:block;font-size:.76rem;margin-bottom:4px;cursor:pointer;">
+    <input type="radio" name="netfilter" value="significant" onchange="recomputeNetwork(this.value)"> Significant only
+  </label>
+  <label style="display:block;font-size:.76rem;cursor:pointer;">
+    <input type="radio" name="netfilter" value="possibly" onchange="recomputeNetwork(this.value)"> Significant + possibly significant
+  </label>
+</div>
+      function recomputeNetwork(mode) {
+  if (!STATE.loci) return;
+  let filtered = STATE.loci;
+  if (mode === 'significant') {
+    filtered = STATE.loci.filter(l => annotations[String(l.id)] && annotations[String(l.id)].label === 'significant');
+  } else if (mode === 'possibly') {
+    filtered = STATE.loci.filter(l => {
+      const lbl = annotations[String(l.id)] && annotations[String(l.id)].label;
+      return lbl === 'significant' || lbl === 'possibly';
+    });
+  }
+  const pairs = computePairs(filtered, STATE.symbols, STATE.corrigenda);
+  const singletons = computeSingletons(filtered);
+  buildStemma(STATE.symbols, STATE.labels, STATE.corrigenda, pairs, singletons, filtered.length);
+}
       <h2>Groups</h2>
       <div id="stemma-legend"></div>
       <div class="edge-grad" style="margin-top:14px"></div>
