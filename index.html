@@ -7,11 +7,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <style>
-/* ── Reset & base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Georgia, serif; background: #faf9f7; color: #2c2825; font-size: 14px; line-height: 1.6; }
 
-/* ── Upload screen ── */
 #upload-screen {
   min-height: 100vh; display: flex; flex-direction: column;
   align-items: center; justify-content: center; padding: 40px 20px;
@@ -22,7 +20,7 @@ body { font-family: Georgia, serif; background: #faf9f7; color: #2c2825; font-si
   box-shadow: 0 4px 24px rgba(44,40,37,.07);
 }
 .upload-card h1 { font-size: 1.3rem; font-weight: normal; color: #2c4a3e; margin-bottom: 6px; }
-.upload-card p { color: #7a736c; font-size: .88rem; margin-bottom: 32px; }
+.upload-card p  { color: #7a736c; font-size: .88rem; margin-bottom: 32px; }
 .drop-zone {
   border: 2px dashed #c8bfb4; border-radius: 8px; padding: 36px 20px;
   cursor: pointer; transition: all .15s; margin-bottom: 16px;
@@ -30,37 +28,26 @@ body { font-family: Georgia, serif; background: #faf9f7; color: #2c2825; font-si
 .drop-zone:hover, .drop-zone.over { border-color: #2c4a3e; background: #f0ebe3; }
 .drop-zone span { display: block; font-size: .82rem; color: #9d9087; margin-top: 8px; }
 .drop-icon { font-size: 2rem; }
-.upload-btn {
-  display: inline-block; padding: 10px 28px; background: #2c4a3e; color: #fff;
-  border: none; border-radius: 6px; font-size: .88rem; cursor: pointer;
-  font-family: Georgia, serif; transition: background .15s;
-}
-.upload-btn:hover { background: #1e3429; }
-#file-input { display: none; }
 .upload-note { font-size: .75rem; color: #b0a89e; margin-top: 14px; }
-.error-msg { color: #c0392b; font-size: .82rem; margin-top: 12px; min-height: 20px; }
+.error-msg   { color: #c0392b; font-size: .82rem; margin-top: 12px; min-height: 20px; }
+#file-input  { display: none; }
 
-/* ── App shell (hidden until file loaded) ── */
 #app { display: none; flex-direction: column; height: 100vh; }
 
-/* ── Header ── */
 #app-header { background: #2c4a3e; color: #fff; padding: 11px 20px; flex-shrink: 0; }
 #app-header h1 { font-size: 1rem; font-weight: normal; }
 #app-header p  { font-size: .73rem; opacity: .8; margin-top: 2px; }
 
-/* ── Tabs ── */
 #tabs {
   background: #fff; border-bottom: 1px solid #e2ddd6;
-  padding: 0 20px; display: flex; gap: 0; flex-shrink: 0;
+  padding: 0 20px; display: flex; flex-shrink: 0;
 }
 .tab {
   padding: 9px 18px; border: none; background: none; font-family: Georgia, serif;
-  font-size: .82rem; color: #7a736c; cursor: pointer; border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
+  font-size: .82rem; color: #7a736c; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
 }
 .tab.active { color: #2c4a3e; border-bottom-color: #2c4a3e; font-weight: bold; }
 
-/* ── Toolbar ── */
 #annot-toolbar {
   background: #fff; border-bottom: 1px solid #e2ddd6; padding: 7px 16px;
   display: flex; gap: 8px; align-items: center; font-size: .76rem; flex-shrink: 0;
@@ -70,15 +57,13 @@ body { font-family: Georgia, serif; background: #faf9f7; color: #2c2825; font-si
   padding: 4px 11px; border-radius: 5px; border: 1px solid #2c4a3e;
   background: #fff; color: #2c4a3e; font-size: .73rem; cursor: pointer; font-family: Georgia, serif;
 }
-.tb-btn:hover { background: #2c4a3e; color: #fff; }
+.tb-btn:hover  { background: #2c4a3e; color: #fff; }
 .tb-btn.danger { border-color: #c0392b; color: #c0392b; }
 .tb-btn.danger:hover { background: #c0392b; color: #fff; }
 #annot-progress { margin-left: auto; font-size: .72rem; color: #7a736c; }
-#new-file-btn { margin-left: 8px; }
 
-/* ── Main layout ── */
 #collation-panel { display: flex; flex: 1; overflow: hidden; }
-#Relation Network-panel    { display: none; flex: 1; overflow: hidden; position: relative; }
+#stemma-panel    { display: none; flex: 1; overflow: hidden; }
 
 #loci-main { flex: 1; padding: 16px 20px; overflow-y: auto; }
 #sidebar {
@@ -92,7 +77,6 @@ h2 {
 }
 h2:first-child { margin-top: 0; }
 
-/* ── Filter bar ── */
 .filter-bar { margin-bottom: 12px; display: flex; gap: 5px; flex-wrap: wrap; }
 .filter-btn {
   padding: 3px 10px; border: 1px solid #2c4a3e; border-radius: 4px;
@@ -100,14 +84,13 @@ h2:first-child { margin-top: 0; }
 }
 .filter-btn.active { background: #2c4a3e; color: #fff; }
 
-/* ── Locus cards ── */
 .locus {
   background: #fff; border: 1px solid #e2ddd6; border-radius: 6px;
   margin-bottom: 8px; padding: 9px 11px; border-left: 3px solid #e2ddd6;
 }
 .locus-split { border-left-color: #fd8d3c; }
-.locus-multi  { border-left-color: #d62728; }
-.locus-id { font-size: .68rem; color: #bbb; font-family: monospace; margin-bottom: 5px; }
+.locus-multi { border-left-color: #d62728; }
+.locus-id    { font-size: .68rem; color: #bbb; font-family: monospace; margin-bottom: 5px; }
 .ctx { font-size: .78rem; color: #9d9087; margin-bottom: 6px; direction: rtl; line-height: 1.5; }
 .ctx-here { color: #2c4a3e; font-size: .7rem; }
 .readings { display: flex; flex-direction: column; gap: 4px; }
@@ -118,14 +101,10 @@ h2:first-child { margin-top: 0; }
 .reading:last-child { border-bottom: none; }
 .rdg-text { flex: 1; direction: rtl; line-height: 1.5; }
 .rdg-sigs { display: flex; gap: 3px; flex-wrap: wrap; flex-shrink: 0; }
-.sig {
-  background: #2c4a3e; color: #fff; border-radius: 3px;
-  padding: 1px 5px; font-family: monospace; font-size: .7rem;
-}
+.sig      { background: #2c4a3e; color: #fff; border-radius: 3px; padding: 1px 5px; font-family: monospace; font-size: .7rem; }
 .sig-corr { background: #a07050; }
-.om { color: #aaa; font-style: italic; font-size: .85em; }
+.om       { color: #aaa; font-style: italic; font-size: .85em; }
 
-/* ── Annotation panel ── */
 .annot { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2ddd6; }
 .annot-labels { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 5px; }
 .annot-btn {
@@ -134,9 +113,9 @@ h2:first-child { margin-top: 0; }
   transition: all .12s;
 }
 .annot-btn:hover { border-color: #2c4a3e; color: #2c4a3e; }
-.annot-btn[data-label="significant"].active  { background: #2c4a3e; color: #fff; border-color: transparent; }
-.annot-btn[data-label="possibly"].active     { background: #c07a2a; color: #fff; border-color: transparent; }
-.annot-btn[data-label="not"].active          { background: #9e9e9e; color: #fff; border-color: transparent; }
+.annot-btn[data-label="significant"].active { background: #2c4a3e; color: #fff; border-color: transparent; }
+.annot-btn[data-label="possibly"].active    { background: #c07a2a; color: #fff; border-color: transparent; }
+.annot-btn[data-label="not"].active         { background: #9e9e9e; color: #fff; border-color: transparent; }
 .annot-note {
   width: 100%; margin-top: 4px; font-size: .75rem; font-family: Georgia, serif;
   border: 1px solid #e2ddd6; border-radius: 4px; padding: 4px 7px;
@@ -148,96 +127,71 @@ h2:first-child { margin-top: 0; }
   color: #fff; margin-left: 6px; vertical-align: middle; font-family: monospace;
 }
 
-/* ── Sidebar tables ── */
 table { width: 100%; border-collapse: collapse; }
 td, th { padding: 3px 5px; text-align: left; }
 tr:nth-child(even) { background: #f5f3f0; }
-.pct { font-weight: bold; width: 42px; }
-.x   { color: #aaa; width: 14px; text-align: center; }
-.bar { height: 6px; border-radius: 3px; min-width: 2px; }
+.pct  { font-weight: bold; width: 42px; }
+.x    { color: #aaa; width: 14px; text-align: center; }
+.bar  { height: 6px; border-radius: 3px; min-width: 2px; }
 .frac { color: #9d9087; font-size: .7rem; }
-.label-col {
-  color: #7a736c; font-size: .72rem; max-width: 160px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.corr-row { opacity: .65; font-style: italic; }
+.label-col { color: #7a736c; font-size: .72rem; max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* ── Relation Network ── */
-#Relation Network-svg-wrap { width: 100%; height: 100%; }
-svg.Relation Network { width: 100%; height: 100%; }
+#stemma-svg-wrap { flex: 1; position: relative; }
+svg.stemma { width: 100%; height: 100%; }
 .node circle { cursor: pointer; stroke: #fff; stroke-width: 2.5; }
-.node text {
-  pointer-events: none; font-family: monospace; font-weight: bold;
-  font-size: 12px; fill: #fff; text-anchor: middle; dominant-baseline: middle;
-}
+.node text   { pointer-events: none; font-family: monospace; font-weight: bold; font-size: 12px; fill: #fff; text-anchor: middle; dominant-baseline: middle; }
 .link { stroke-opacity: .7; }
 .tooltip {
   position: absolute; background: #2c2825; color: #fff; padding: 7px 10px;
   border-radius: 6px; font-size: .76rem; pointer-events: none; opacity: 0;
   transition: opacity .15s; max-width: 220px; line-height: 1.5;
 }
-#Relation Network-sidebar {
+#stemma-sidebar {
   width: 270px; background: #fff; border-left: 1px solid #e2ddd6;
   padding: 16px; overflow-y: auto; font-size: .8rem; flex-shrink: 0;
 }
 .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
 .legend-dot  { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
-.ms-detail {
-  margin-bottom: 10px; padding: 8px; background: #faf9f7;
-  border-radius: 5px; border: 1px solid #e2ddd6;
-}
-.sigil { font-family: monospace; font-weight: bold; font-size: .88rem; }
-.ms-name  { color: #7a736c; font-size: .72rem; margin: 2px 0 4px; }
+.ms-detail   { margin-bottom: 10px; padding: 8px; background: #faf9f7; border-radius: 5px; border: 1px solid #e2ddd6; }
+.sigil   { font-family: monospace; font-weight: bold; font-size: .88rem; }
+.ms-name { color: #7a736c; font-size: .72rem; margin: 2px 0 4px; }
 .bar-wrap { background: #e5e7eb; border-radius: 4px; height: 5px; }
 .bar-fill { height: 5px; border-radius: 4px; }
 .ms-stat  { font-size: .7rem; color: #aaa; margin-top: 3px; }
-.edge-grad {
-  height: 7px; border-radius: 4px;
-  background: linear-gradient(to right, #d62728, #fd8d3c, #1a6b3c);
-}
+.edge-grad { height: 7px; border-radius: 4px; background: linear-gradient(to right, #d62728, #fd8d3c, #1a6b3c); }
 .edge-labels { display: flex; justify-content: space-between; font-size: .7rem; color: #7a736c; margin-top: 3px; }
 #thr-wrap { margin-top: 12px; }
 #thr-wrap label { font-size: .76rem; color: #7a736c; display: block; margin-bottom: 4px; }
 #thr { width: 100%; accent-color: #2c4a3e; }
-.Relation Network-note {
-  font-size: .72rem; color: #9d9087; margin-top: 14px; line-height: 1.5;
-  border-top: 1px solid #e2ddd6; padding-top: 10px;
-}
+.stemma-note { font-size: .72rem; color: #9d9087; margin-top: 14px; line-height: 1.5; border-top: 1px solid #e2ddd6; padding-top: 10px; }
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════════════ UPLOAD SCREEN -->
 <div id="upload-screen">
   <div class="upload-card">
     <h1>Mahadurot Collation Editor</h1>
     <p>Upload a Mahadurot critical edition file (.txt) to generate an interactive collation with annotation tools.</p>
-
     <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
       <div class="drop-icon">📄</div>
       <strong>Click to choose a file</strong>
       <span>or drag and drop here</span>
     </div>
     <input type="file" id="file-input" accept=".txt">
-
-    <div class="upload-note">
-      Expected format: YAML front matter (between ---) followed by body text with [reading]{witnesses} notation.
-    </div>
+    <div class="upload-note">Expected format: YAML front matter (between ---) followed by body text with [reading]{witnesses} notation.</div>
     <div class="error-msg" id="error-msg"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════ APP SHELL -->
 <div id="app">
-
   <div id="app-header">
     <h1 id="app-title">Collation</h1>
     <p id="app-subtitle"></p>
   </div>
 
   <div id="tabs">
-    <button class="tab active" onclick="showTab('collation', this)">Collation</button>
-    <button class="tab" onclick="showTab('Relation Network', this)">Relation Network</button>
+    <button class="tab active" onclick="showTab('collation',this)">Collation</button>
+    <button class="tab" onclick="showTab('stemma',this)">Relation Network</button>
   </div>
 
   <div id="annot-toolbar">
@@ -248,18 +202,17 @@ svg.Relation Network { width: 100%; height: 100%; }
     </label>
     <button class="tb-btn danger" onclick="clearAll()">Clear all</button>
     <span id="annot-progress"></span>
-    <button class="tb-btn" id="new-file-btn" onclick="resetToUpload()">↩ New file</button>
+    <button class="tb-btn" onclick="resetToUpload()" style="margin-left:8px">↩ New file</button>
   </div>
 
-  <!-- Collation tab -->
   <div id="collation-panel">
     <div id="loci-main">
-      <div class="filter-bar" id="filter-bar">
+      <div class="filter-bar">
         <button class="filter-btn active" onclick="filterLoci('all',this)">All</button>
         <button class="filter-btn" onclick="filterLoci('split',this)">2 readings</button>
         <button class="filter-btn" onclick="filterLoci('multi',this)">3+ readings</button>
-        <button class="filter-btn" onclick="filterLoci('labeled',this)">Labeled significant</button>
-        <button class="filter-btn" onclick="filterLoci('unlabeled',this)">Possibly significant</button>
+        <button class="filter-btn" onclick="filterLoci('significant',this)">Significant</button>
+        <button class="filter-btn" onclick="filterLoci('possibly',this)">Possibly significant</button>
         <button class="filter-btn" onclick="filterLoci('not',this)">Not significant</button>
       </div>
       <div id="loci-list"></div>
@@ -267,61 +220,42 @@ svg.Relation Network { width: 100%; height: 100%; }
     <div id="sidebar">
       <h2>Witnesses</h2>
       <table id="wit-table"></table>
-
       <h2>Pairwise agreement</h2>
-      <table id="pair-table">
+      <table>
         <colgroup>
           <col style="width:28px"><col style="width:12px"><col style="width:28px">
           <col style="width:42px"><col><col style="width:44px">
         </colgroup>
         <tbody id="pair-rows"></tbody>
       </table>
-
       <h2>Unique readings (singletons)</h2>
-      <table id="sing-table">
+      <table>
         <tr><th>Sig.</th><th>Witness</th><th>n</th><th>%</th></tr>
         <tbody id="sing-rows"></tbody>
       </table>
-
       <h2>Top split patterns</h2>
       <table><tbody id="split-rows"></tbody></table>
     </div>
   </div>
 
-  <!-- Relation Network tab -->
   <div id="stemma-panel">
-    <div id="stemma-svg-wrap" style="flex:1;position:relative;">
+    <div id="stemma-svg-wrap">
       <svg class="stemma" id="stemma-svg"></svg>
       <div class="tooltip" id="stemma-tip"></div>
     </div>
     <div id="stemma-sidebar">
       <div id="network-filter" style="margin-bottom:14px;">
-  <div style="font-size:.72rem;color:#7a736c;margin-bottom:6px;font-weight:bold;text-transform:uppercase;letter-spacing:.05em;">Include loci</div>
-  <label style="display:block;font-size:.76rem;margin-bottom:4px;cursor:pointer;">
-    <input type="radio" name="netfilter" value="all" checked onchange="recomputeNetwork(this.value)"> All differences
-  </label>
-  <label style="display:block;font-size:.76rem;margin-bottom:4px;cursor:pointer;">
-    <input type="radio" name="netfilter" value="significant" onchange="recomputeNetwork(this.value)"> Significant only
-  </label>
-  <label style="display:block;font-size:.76rem;cursor:pointer;">
-    <input type="radio" name="netfilter" value="possibly" onchange="recomputeNetwork(this.value)"> Significant + possibly significant
-  </label>
-</div>
-      function recomputeNetwork(mode) {
-  if (!STATE.loci) return;
-  let filtered = STATE.loci;
-  if (mode === 'significant') {
-    filtered = STATE.loci.filter(l => annotations[String(l.id)] && annotations[String(l.id)].label === 'significant');
-  } else if (mode === 'possibly') {
-    filtered = STATE.loci.filter(l => {
-      const lbl = annotations[String(l.id)] && annotations[String(l.id)].label;
-      return lbl === 'significant' || lbl === 'possibly';
-    });
-  }
-  const pairs = computePairs(filtered, STATE.symbols, STATE.corrigenda);
-  const singletons = computeSingletons(filtered);
-  buildStemma(STATE.symbols, STATE.labels, STATE.corrigenda, pairs, singletons, filtered.length);
-}
+        <div style="font-size:.72rem;color:#7a736c;margin-bottom:6px;font-weight:bold;text-transform:uppercase;letter-spacing:.05em;">Include loci</div>
+        <label style="display:block;font-size:.76rem;margin-bottom:4px;cursor:pointer;">
+          <input type="radio" name="netfilter" value="all" checked onchange="recomputeNetwork(this.value)"> All differences
+        </label>
+        <label style="display:block;font-size:.76rem;margin-bottom:4px;cursor:pointer;">
+          <input type="radio" name="netfilter" value="significant" onchange="recomputeNetwork(this.value)"> Significant only
+        </label>
+        <label style="display:block;font-size:.76rem;cursor:pointer;">
+          <input type="radio" name="netfilter" value="possibly" onchange="recomputeNetwork(this.value)"> Significant + possibly significant
+        </label>
+      </div>
       <h2>Groups</h2>
       <div id="stemma-legend"></div>
       <div class="edge-grad" style="margin-top:14px"></div>
@@ -335,19 +269,16 @@ svg.Relation Network { width: 100%; height: 100%; }
       <div class="stemma-note">
         Node size ∝ stability (larger = fewer unique readings).<br>
         Drag nodes · scroll to zoom.<br><br>
-        Corrigenda (P*, O+) excluded from statistics.
+        Corrigenda excluded from statistics.
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
 'use strict';
 
-// ══════════════════════════════════════════════════════════ PARSER
-
-const SPELLING_EXCEPTIONS = new Set(['הוא','היא','הוה','הויה','הוי','לוי','לויה','חוה','חוי']);
+// ── Parser ───────────────────────────────────────────────────────────────────
 
 function loadEdition(text) {
   const parts = text.split(/\n?---\n/);
@@ -358,7 +289,7 @@ function loadEdition(text) {
 }
 
 function getSigla(header) {
-  const entries = header.sigla || [];
+  const entries    = header.sigla || [];
   const symbols    = entries.map(e => e.symbol);
   const labels     = {};
   const corrigenda = new Set();
@@ -376,9 +307,9 @@ function parseWitnessSpec(spec, symSet) {
   spec = spec.trim();
   let present = [], absent = [];
   if (spec.includes('|')) {
-    const idx = spec.indexOf('|');
-    const left  = spec.slice(0, idx);
-    let   right = spec.slice(idx + 1).trim();
+    const idx  = spec.indexOf('|');
+    const left = spec.slice(0, idx);
+    let right  = spec.slice(idx + 1).trim();
     if (right.toLowerCase().startsWith('om.')) right = right.slice(3).trim();
     present = left.split(',').map(s => s.trim()).filter(s => symSet.has(s));
     absent  = right.split(',').map(s => s.trim()).filter(s => symSet.has(s));
@@ -395,20 +326,8 @@ function cleanText(t) {
   return t.replace(/\s+/g, ' ').trim();
 }
 
-function normalizeSpelling(text) {
-  if (!text) return text;
-  return text.split(' ').map(w => {
-    if (SPELLING_EXCEPTIONS.has(w)) return w;
-    try {
-      w = w.replace(/(?<=[א-ת])ו(?=[א-ת])/gu, '');
-      w = w.replace(/(?<=[א-ת])י(?=[א-ת])/gu, '');
-    } catch(e) { /* fallback: no normalization on unsupported browsers */ }
-    return w;
-  }).join(' ');
-}
-
 function extractReadings(body, symbols) {
-  const symSet = new Set(symbols);
+  const symSet  = new Set(symbols);
   const results = [];
   const specRe  = /\{([^}]+)\}/g;
   let m;
@@ -416,22 +335,17 @@ function extractReadings(body, symbols) {
     const spec   = m[1];
     const tokens = spec.split(/[,\s|.]+/);
     if (!tokens.some(t => symSet.has(t.trim()))) continue;
-
     const closePos = m.index - 1;
     if (closePos < 0 || body[closePos] !== ']') continue;
-
     let depth = 1, openPos = null;
     for (let i = closePos - 1; i >= 0; i--) {
       if      (body[i] === ']') depth++;
       else if (body[i] === '[') { if (--depth === 0) { openPos = i; break; } }
     }
     if (openPos === null) continue;
-
-    const rawText = body.slice(openPos + 1, closePos);
     const { present, absent } = parseWitnessSpec(spec, symSet);
     if (!present.length && !absent.length) continue;
-
-    results.push({ open: openPos, close: m.index + m[0].length, text: cleanText(rawText), present, absent });
+    results.push({ open: openPos, close: m.index + m[0].length, text: cleanText(body.slice(openPos + 1, closePos)), present, absent });
   }
   results.sort((a, b) => a.open - b.open);
   return results;
@@ -442,13 +356,13 @@ function groupLoci(readings, body) {
   const loci = [];
   let group = [readings[0]];
   for (const r of readings.slice(1)) {
-    const prev    = group[group.length - 1];
-    const between = body.slice(prev.close, r.open);
+    const prev      = group[group.length - 1];
+    const between   = body.slice(prev.close, r.open);
     const closeEnough = /^[\s\[\]]*$/.test(between);
-    const groupW  = new Set(group.flatMap(gr => [...gr.present, ...gr.absent]));
-    const rW      = new Set([...r.present, ...r.absent]);
-    const disjoint = ![...rW].some(s => groupW.has(s));
-    if (closeEnough && disjoint) { group.push(r); }
+    const groupW    = new Set(group.flatMap(gr => [...gr.present, ...gr.absent]));
+    const rW        = new Set([...r.present, ...r.absent]);
+    const disjoint  = ![...rW].some(s => groupW.has(s));
+    if (closeEnough && disjoint) group.push(r);
     else { loci.push(group); group = [r]; }
   }
   loci.push(group);
@@ -470,19 +384,14 @@ function buildLocusRecords(locusGroups, body) {
       for (const s of r.absent)  witnessMap[s] = '';
     }
     if (Object.keys(witnessMap).length < 2) return;
+    if (new Set(Object.values(witnessMap)).size < 2) return;
 
-    const normMap = {};
-    for (const [s, t] of Object.entries(witnessMap)) normMap[s] = normalizeSpelling(t);
-    if (new Set(Object.values(normMap)).size < 2) return;
-
-    const rgDict = {}, firstOrig = {};
-    for (const [s, nt] of Object.entries(normMap)) {
-      (rgDict[nt] = rgDict[nt] || []).push(s);
-      if (!(nt in firstOrig)) firstOrig[nt] = witnessMap[s];
+    const rgDict = {};
+    for (const [s, t] of Object.entries(witnessMap)) {
+      (rgDict[t] = rgDict[t] || []).push(s);
     }
-
-    const readingGroups = Object.entries(rgDict).map(([nt, sigs]) => ({
-      text: firstOrig[nt], witnesses: [...sigs].sort()
+    const readingGroups = Object.entries(rgDict).map(([t, sigs]) => ({
+      text: t, witnesses: [...sigs].sort()
     })).sort((a, b) => {
       if (b.witnesses.length !== a.witnesses.length) return b.witnesses.length - a.witnesses.length;
       return (a.text === '' ? 1 : 0) - (b.text === '' ? 1 : 0);
@@ -493,7 +402,6 @@ function buildLocusRecords(locusGroups, body) {
       id: idx + 1,
       readingGroups,
       witnessMap,
-      normMap,
       contextBefore: before,
       contextAfter:  after,
       hasOmission:   readingGroups.some(rg => rg.text === ''),
@@ -509,7 +417,7 @@ function computePairs(loci, symbols, corrigenda) {
     for (let j = i+1; j < active.length; j++)
       pairs[`${active[i]}§${active[j]}`] = { a: active[i], b: active[j], agree: 0, total: 0 };
   for (const locus of loci) {
-    const wm      = locus.normMap;
+    const wm      = locus.witnessMap;
     const covered = active.filter(s => s in wm);
     for (let i = 0; i < covered.length; i++) {
       for (let j = i+1; j < covered.length; j++) {
@@ -543,50 +451,44 @@ function computeSplits(loci) {
       splits[key] = (splits[key] || 0) + 1;
     }
   }
-  return Object.entries(splits)
-    .map(([k,c]) => ({ groups: JSON.parse(k), count: c }))
+  return Object.entries(splits).map(([k,c]) => ({ groups: JSON.parse(k), count: c }))
     .sort((a,b) => b.count - a.count);
 }
 
 function agreementRate(p) { return p.total ? p.agree / p.total : 0; }
 
-// ══════════════════════════════════════════════════════════ STATE
-let STATE = { loci: [], pairs: [], singletons: {}, splits: [], symbols: [], labels: {}, corrigenda: new Set(), bookName: '', nLoci: 0 };
+// ── State ────────────────────────────────────────────────────────────────────
+
+let STATE = {};
 let annotations = {};
-let STORE_KEY = '';
+let STORE_KEY   = '';
 
 const LABEL_COLOR = { significant: '#2c4a3e', possibly: '#c07a2a', not: '#9e9e9e' };
 const LABEL_NAME  = { significant: 'significant', possibly: 'possibly significant', not: 'not significant' };
 
-// ══════════════════════════════════════════════════════════ RENDER
+// ── Render collation ─────────────────────────────────────────────────────────
 
 function renderLoci(loci, labels, corrigenda) {
   const list = document.getElementById('loci-list');
   list.innerHTML = '';
   const frag = document.createDocumentFragment();
-
   for (const locus of loci) {
-    const n = locus.readingGroups.length;
+    const n   = locus.readingGroups.length;
     const cls = n > 2 ? 'locus-multi' : n === 2 ? 'locus-split' : '';
-
-    // Reading rows
     let rdgHtml = '<div class="readings">';
     for (const rg of locus.readingGroups) {
-      const sigsHtml = rg.witnesses.map(s => {
-        const isCor = corrigenda.has(s);
-        return `<span class="sig${isCor ? ' sig-corr' : ''}">${s}</span>`;
-      }).join(' ');
-      const text = rg.text ? rg.text : '<em class="om">om.</em>';
-      rdgHtml += `<div class="reading"><span class="rdg-text">${text}</span><span class="rdg-sigs">${sigsHtml}</span></div>`;
+      const sigsHtml = rg.witnesses.map(s =>
+        `<span class="sig${corrigenda.has(s) ? ' sig-corr' : ''}">${s}</span>`
+      ).join(' ');
+      rdgHtml += `<div class="reading">
+        <span class="rdg-text">${rg.text || '<em class="om">om.</em>'}</span>
+        <span class="rdg-sigs">${sigsHtml}</span>
+      </div>`;
     }
     rdgHtml += '</div>';
-
-    // Context
     let ctxHtml = '';
     if (locus.contextBefore || locus.contextAfter)
       ctxHtml = `<div class="ctx">…${locus.contextBefore} <span class="ctx-here">◆</span> ${locus.contextAfter}…</div>`;
-
-    // Annotation panel
     const annotHtml = `
       <div class="annot">
         <div class="annot-labels">
@@ -596,7 +498,6 @@ function renderLoci(loci, labels, corrigenda) {
         </div>
         <textarea class="annot-note" data-locus="${locus.id}" placeholder="Notes…" oninput="saveNote(this)"></textarea>
       </div>`;
-
     const div = document.createElement('div');
     div.className = `locus ${cls}`;
     div.id = `locus-${locus.id}`;
@@ -611,85 +512,62 @@ function renderLoci(loci, labels, corrigenda) {
 }
 
 function renderSidebar(symbols, labels, corrigenda, pairs, singletons, splits, nLoci) {
-  // Witnesses
-  const witTable = document.getElementById('wit-table');
-  witTable.innerHTML = symbols.map(s => {
-    if (corrigenda.has(s))
-      return `<tr class="corr-row"><td><span class="sig sig-corr">${s}</span></td><td class="label-col">${labels[s]||s} <em style="color:#a07050;font-size:.68rem">(corrigendum)</em></td></tr>`;
-    return `<tr><td><span class="sig">${s}</span></td><td class="label-col">${labels[s]||s}</td></tr>`;
-  }).join('');
+  document.getElementById('wit-table').innerHTML = symbols.map(s =>
+    corrigenda.has(s)
+      ? `<tr style="opacity:.65"><td><span class="sig sig-corr">${s}</span></td><td class="label-col">${labels[s]||s} <em style="color:#a07050;font-size:.68rem">(corrigendum)</em></td></tr>`
+      : `<tr><td><span class="sig">${s}</span></td><td class="label-col">${labels[s]||s}</td></tr>`
+  ).join('');
 
-  // Pairs
-  const pairRows = document.getElementById('pair-rows');
-  pairRows.innerHTML = pairs.map(p => {
-    const rate = agreementRate(p), pct = `${(rate*100).toFixed(1)}%`;
-    const barW = Math.round(rate * 100);
+  document.getElementById('pair-rows').innerHTML = pairs.map(p => {
+    const rate = agreementRate(p);
     const col  = rate >= 0.90 ? '#2ca02c' : rate >= 0.75 ? '#fd8d3c' : '#d62728';
     return `<tr>
-      <td class="sig" style="background:#2c4a3e;color:#fff;border-radius:3px;padding:1px 5px;font-size:.7rem">${p.a}</td>
-      <td class="x">×</td>
-      <td class="sig" style="background:#2c4a3e;color:#fff;border-radius:3px;padding:1px 5px;font-size:.7rem">${p.b}</td>
-      <td class="pct">${pct}</td>
-      <td><div class="bar" style="width:${barW}%;background:${col}"></div></td>
+      <td><span class="sig">${p.a}</span></td><td class="x">×</td><td><span class="sig">${p.b}</span></td>
+      <td class="pct">${(rate*100).toFixed(1)}%</td>
+      <td><div class="bar" style="width:${Math.round(rate*100)}%;background:${col}"></div></td>
       <td class="frac">${p.agree}/${p.total}</td></tr>`;
   }).join('');
 
-  // Singletons
-  const singRows = document.getElementById('sing-rows');
-  const singArr  = Object.entries(singletons).sort((a,b) => b[1]-a[1]);
-  singRows.innerHTML = singArr.map(([sig, n]) => {
-    const pct = nLoci ? `${Math.round(n/nLoci*100)}%` : '0%';
-    return `<tr><td class="sig" style="background:#2c4a3e;color:#fff;border-radius:3px;padding:1px 5px;font-size:.7rem">${sig}</td><td class="label-col">${labels[sig]||sig}</td><td>${n}</td><td>${pct}</td></tr>`;
-  }).join('') || '<tr><td colspan="4" style="color:#aaa">None</td></tr>';
+  const singArr = Object.entries(singletons).sort((a,b) => b[1]-a[1]);
+  document.getElementById('sing-rows').innerHTML = singArr.map(([sig, n]) =>
+    `<tr><td><span class="sig">${sig}</span></td><td class="label-col">${labels[sig]||sig}</td><td>${n}</td><td>${nLoci ? Math.round(n/nLoci*100)+'%' : '0%'}</td></tr>`
+  ).join('') || '<tr><td colspan="4" style="color:#aaa">None</td></tr>';
 
-  // Splits
-  const splitRows = document.getElementById('split-rows');
-  splitRows.innerHTML = splits.slice(0, 10).map(s =>
+  document.getElementById('split-rows').innerHTML = splits.slice(0,10).map(s =>
     `<tr><td>[${s.groups[0].join(', ')}] vs [${s.groups[1].join(', ')}]</td><td>${s.count}×</td></tr>`
   ).join('') || '<tr><td style="color:#aaa">None</td></tr>';
 }
 
-// ══════════════════════════════════════════════════════════ Relation Network
+// ── Relation Network (stemma) ─────────────────────────────────────────────────
 
-let simRef = null, linkSelRef = null, nodeLoci = 0;
+let simRef = null, linkSelRef = null;
 
-function buildRelation Network(symbols, labels, corrigenda, pairs, singletons, nLoci) {
-  nodeLoci = nLoci;
-  const active = symbols.filter(s => !corrigenda.has(s));
-
-  // Average agreement → group
-  const avgAgree = {};
+function buildStemma(symbols, labels, corrigenda, pairs, singletons, nLoci) {
+  const active    = symbols.filter(s => !corrigenda.has(s));
+  const avgAgree  = {};
   for (const s of active) {
     const rates = pairs.filter(p => (p.a===s||p.b===s) && p.total>=3).map(agreementRate);
     avgAgree[s] = rates.length ? rates.reduce((a,b)=>a+b,0)/rates.length : 0;
   }
-  const grp = s => avgAgree[s]>=0.75 ? 1 : avgAgree[s]>=0.50 ? 2 : 3;
+  const grp      = s => avgAgree[s]>=0.75 ? 1 : avgAgree[s]>=0.50 ? 2 : 3;
   const grpColor = { 1:'#1a6b3c', 2:'#c77d2a', 3:'#9d0208' };
   const grpLabel = { 1:'Core family', 2:'Intermediate', 3:'Outlier' };
   const maxSing  = Math.max(1, ...active.map(s => singletons[s]||0));
   const rScale   = d3.scaleSqrt().domain([0, maxSing]).range([28, 12]);
 
-  const nodes = active.map(s => ({
-    id: s, label: s, full: (labels[s]||s).replace(/"/g,''),
-    singletons: singletons[s]||0, group: grp(s)
-  }));
-  const allLinks = pairs
-    .filter(p => !corrigenda.has(p.a) && !corrigenda.has(p.b) && p.total>=3)
-    .map(p => ({ source: p.a, target: p.b, agreement: agreementRate(p) }));
+  const nodes    = active.map(s => ({ id:s, label:s, full:(labels[s]||s).replace(/"/g,''), singletons:singletons[s]||0, group:grp(s) }));
+  const allLinks = pairs.filter(p => !corrigenda.has(p.a) && !corrigenda.has(p.b) && p.total>=3)
+    .map(p => ({ source:p.a, target:p.b, agreement:agreementRate(p) }));
 
-  // Legend
   const seenGrps = [...new Set(active.map(grp))].sort();
-  document.getElementById('Relation Network-legend').innerHTML = seenGrps.map(g =>
+  document.getElementById('stemma-legend').innerHTML = seenGrps.map(g =>
     `<div class="legend-item"><div class="legend-dot" style="background:${grpColor[g]}"></div><span>${grpLabel[g]}</span></div>`
   ).join('');
 
-  // MS list
-  document.getElementById('Relation Network-ms-list').innerHTML = [...active]
+  document.getElementById('stemma-ms-list').innerHTML = [...active]
     .sort((a,b) => (singletons[a]||0)-(singletons[b]||0))
     .map(s => {
-      const n   = singletons[s]||0;
-      const pct = nLoci ? Math.round(n/nLoci*100) : 0;
-      const col = grpColor[grp(s)];
+      const n=singletons[s]||0, pct=nLoci?Math.round(n/nLoci*100):0, col=grpColor[grp(s)];
       return `<div class="ms-detail">
         <div class="sigil" style="color:${col}">${s}</div>
         <div class="ms-name">${labels[s]||s}</div>
@@ -698,52 +576,41 @@ function buildRelation Network(symbols, labels, corrigenda, pairs, singletons, n
       </div>`;
     }).join('');
 
-  // D3 force graph
-  const wrap = document.getElementById('Relation Network-svg-wrap');
-  const svg  = d3.select('#Relation Network-svg');
+  const wrap = document.getElementById('stemma-svg-wrap');
+  const svg  = d3.select('#stemma-svg');
   svg.selectAll('*').remove();
+  if (simRef) simRef.stop();
 
   let W = wrap.clientWidth, H = wrap.clientHeight;
   svg.attr('viewBox', `0 0 ${W} ${H}`);
-  window.addEventListener('resize', () => {
-    W = wrap.clientWidth; H = wrap.clientHeight;
-    svg.attr('viewBox', `0 0 ${W} ${H}`);
-    if (simRef) simRef.alpha(0.1).restart();
-  });
 
   const g     = svg.append('g');
-  const tip   = document.getElementById('Relation Network-tip');
+  const tip   = document.getElementById('stemma-tip');
   const agCol = d3.scaleSequential().domain([0.4,1.0]).interpolator(d3.interpolateRdYlGn);
-
   svg.call(d3.zoom().scaleExtent([0.3,4]).on('zoom', e => g.attr('transform', e.transform)));
-
   const linkG = g.append('g'), nodeG = g.append('g');
-  let threshold = 0.60;
 
   function updateLinks() {
-    const filtered = allLinks.filter(l => l.agreement >= threshold);
-    linkSelRef = linkG.selectAll('line').data(filtered, d =>
-      (d.source.id||d.source)+(d.target.id||d.target));
+    const thr      = +document.getElementById('thr').value / 100;
+    const filtered = allLinks.filter(l => l.agreement >= thr);
+    linkSelRef = linkG.selectAll('line').data(filtered, d => (d.source.id||d.source)+(d.target.id||d.target));
     linkSelRef.exit().remove();
     linkSelRef = linkSelRef.enter().append('line').attr('class','link').merge(linkSelRef)
       .attr('stroke', d => agCol(d.agreement))
       .attr('stroke-width', d => Math.pow((d.agreement-0.3)/0.7,1.5)*14+1)
-      .on('mouseover',(e,d)=>{
-        const s=d.source.id||d.source, t=d.target.id||d.target;
-        showTip(tip,e,`${s} × ${t}<br><strong>${Math.round(d.agreement*100)}% agreement</strong>`);
-      }).on('mouseout',()=>hideTip(tip));
+      .on('mouseover',(e,d)=>{ const s=d.source.id||d.source,t=d.target.id||d.target; tip.innerHTML=`${s} × ${t}<br><strong>${Math.round(d.agreement*100)}% agreement</strong>`; tip.style.opacity=1; tip.style.left=(e.pageX+14)+'px'; tip.style.top=(e.pageY-10)+'px'; })
+      .on('mouseout', ()=>{ tip.style.opacity=0; });
     simRef.force('link').links(filtered);
     simRef.alpha(0.3).restart();
   }
 
-  const nodeSel = nodeG.selectAll('.node').data(nodes, d=>d.id)
-    .enter().append('g').attr('class','node')
+  const nodeSel = nodeG.selectAll('.node').data(nodes, d=>d.id).enter().append('g').attr('class','node')
     .call(d3.drag()
       .on('start',(e,d)=>{ if(!e.active) simRef.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
       .on('drag', (e,d)=>{ d.fx=e.x; d.fy=e.y; })
       .on('end',  (e,d)=>{ if(!e.active) simRef.alphaTarget(0); d.fx=null; d.fy=null; }))
-    .on('mouseover',(e,d)=>showTip(tip,e,`<strong>${d.label}</strong> — ${d.full}<br>Unique: ${d.singletons}/${nLoci}`))
-    .on('mouseout',()=>hideTip(tip));
+    .on('mouseover',(e,d)=>{ tip.innerHTML=`<strong>${d.label}</strong> — ${d.full}<br>Unique: ${d.singletons}/${nLoci}`; tip.style.opacity=1; tip.style.left=(e.pageX+14)+'px'; tip.style.top=(e.pageY-10)+'px'; })
+    .on('mouseout',()=>{ tip.style.opacity=0; });
   nodeSel.append('circle').attr('r', d=>rScale(d.singletons)).attr('fill', d=>grpColor[d.group]);
   nodeSel.append('text').text(d=>d.label);
 
@@ -753,35 +620,43 @@ function buildRelation Network(symbols, labels, corrigenda, pairs, singletons, n
     .force('center',    d3.forceCenter(0,0))
     .force('collision', d3.forceCollide(d=>rScale(d.singletons)+10))
     .on('tick', () => {
-      if (linkSelRef) linkSelRef
-        .attr('x1',d=>d.source.x).attr('y1',d=>d.source.y)
-        .attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+      if (linkSelRef) linkSelRef.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
       nodeSel.attr('transform', d=>`translate(${d.x},${d.y})`);
       g.attr('transform', `translate(${W/2},${H/2})`);
     });
 
-  document.getElementById('thr').value = 60;
-  document.getElementById('thr-val').textContent = '60';
-  updateLinks();
-
   window._updateLinks = updateLinks;
-  window._threshold   = () => threshold;
-  window._setThreshold = v => { threshold = v; };
+  window._resizeStemma = () => {
+    W = wrap.clientWidth; H = wrap.clientHeight;
+    svg.attr('viewBox', `0 0 ${W} ${H}`);
+    if (simRef) simRef.alpha(0.1).restart();
+  };
+
+  updateLinks();
 }
 
 function updateThreshold(el) {
   document.getElementById('thr-val').textContent = el.value;
-  window._setThreshold(+el.value / 100);
   if (window._updateLinks) window._updateLinks();
 }
 
-function showTip(tip, e, html) {
-  tip.innerHTML = html; tip.style.opacity = 1;
-  tip.style.left = (e.pageX+14)+'px'; tip.style.top = (e.pageY-10)+'px';
+function recomputeNetwork(mode) {
+  if (!STATE.loci) return;
+  let filtered = STATE.loci;
+  if (mode === 'significant') {
+    filtered = STATE.loci.filter(l => annotations[String(l.id)] && annotations[String(l.id)].label === 'significant');
+  } else if (mode === 'possibly') {
+    filtered = STATE.loci.filter(l => {
+      const lbl = annotations[String(l.id)] && annotations[String(l.id)].label;
+      return lbl === 'significant' || lbl === 'possibly';
+    });
+  }
+  const pairs      = computePairs(filtered, STATE.symbols, STATE.corrigenda);
+  const singletons = computeSingletons(filtered);
+  buildStemma(STATE.symbols, STATE.labels, STATE.corrigenda, pairs, singletons, filtered.length);
 }
-function hideTip(tip) { tip.style.opacity = 0; }
 
-// ══════════════════════════════════════════════════════════ ANNOTATIONS
+// ── Annotations ──────────────────────────────────────────────────────────────
 
 function initAnnotations(loci) {
   let changed = false;
@@ -804,8 +679,7 @@ function initAnnotations(loci) {
 function setLabel(btn) {
   const id    = btn.dataset.locus;
   const label = btn.dataset.label;
-  const cur   = annotations[id] && annotations[id].label;
-  const next  = cur === label ? null : label;
+  const next  = (annotations[id] && annotations[id].label) === label ? null : label;
   annotations[id] = { ...(annotations[id]||{}), label: next };
   applyLabel(id, next);
   saveAnnotations();
@@ -816,18 +690,10 @@ function applyLabel(id, label) {
     b.classList.toggle('active', b.dataset.label === label));
   const card  = document.getElementById(`locus-${id}`);
   const badge = document.getElementById(`badge-${id}`);
-  if (card) {
-    if (label) card.style.borderLeftColor = LABEL_COLOR[label] || '';
-    else card.style.borderLeftColor = '';
-  }
+  if (card)  card.style.borderLeftColor = label ? (LABEL_COLOR[label]||'') : '';
   if (badge) {
-    if (label) {
-      badge.textContent = LABEL_NAME[label]||label;
-      badge.style.background = LABEL_COLOR[label];
-      badge.style.display = 'inline-block';
-    } else {
-      badge.style.display = 'none';
-    }
+    if (label) { badge.textContent=LABEL_NAME[label]||label; badge.style.background=LABEL_COLOR[label]; badge.style.display='inline-block'; }
+    else       { badge.style.display='none'; }
   }
 }
 
@@ -843,24 +709,23 @@ function saveAnnotations() {
 }
 
 function updateProgress() {
-  const total   = document.querySelectorAll('.locus').length;
-  const sigCount = Object.values(annotations).filter(a=>a.label==='significant').length;
-  const notCount = Object.values(annotations).filter(a=>a.label==='not').length;
+  const sig = Object.values(annotations).filter(a=>a.label==='significant').length;
+  const not = Object.values(annotations).filter(a=>a.label==='not').length;
+  const tot = document.querySelectorAll('.locus').length;
   document.getElementById('annot-progress').textContent =
-    `${sigCount} significant · ${notCount} not significant · ${total - sigCount - notCount} possibly significant`;
+    `${sig} significant · ${not} not significant · ${tot-sig-not} possibly significant`;
 }
 
 function exportLabels() {
   const blob = new Blob([JSON.stringify(annotations, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `annotations_${STATE.bookName.replace(/[^a-z0-9]/gi,'_')}.json`;
+  a.download = `annotations_${(STATE.bookName||'edition').replace(/[^a-z0-9]/gi,'_')}.json`;
   a.click();
 }
 
 function importLabels(evt) {
-  const file = evt.target.files[0];
-  if (!file) return;
+  const file = evt.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
     try {
@@ -868,10 +733,8 @@ function importLabels(evt) {
       saveAnnotations();
       for (const [id, ann] of Object.entries(annotations)) {
         if (ann.label) applyLabel(id, ann.label);
-        if (ann.note) {
-          const ta = document.querySelector(`.annot-note[data-locus="${id}"]`);
-          if (ta) ta.value = ann.note;
-        }
+        const ta = document.querySelector(`.annot-note[data-locus="${id}"]`);
+        if (ta && ann.note) ta.value = ann.note;
       }
       updateProgress();
     } catch(err) { alert('Could not parse JSON: ' + err); }
@@ -882,60 +745,58 @@ function importLabels(evt) {
 
 function clearAll() {
   if (!confirm('Clear all annotations?')) return;
-  annotations = {};
-  saveAnnotations();
-  document.querySelectorAll('.annot-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.locus').forEach(c => c.style.borderLeftColor = '');
-  document.querySelectorAll('.annot-badge').forEach(b => b.style.display='none');
-  document.querySelectorAll('.annot-note').forEach(t => t.value='');
+  annotations = {}; saveAnnotations();
+  document.querySelectorAll('.annot-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.locus').forEach(c=>c.style.borderLeftColor='');
+  document.querySelectorAll('.annot-badge').forEach(b=>b.style.display='none');
+  document.querySelectorAll('.annot-note').forEach(t=>t.value='');
   updateProgress();
 }
 
-// ══════════════════════════════════════════════════════════ FILTER
+// ── Filter ───────────────────────────────────────────────────────────────────
 
 function filterLoci(mode, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.locus').forEach(el => {
     const g   = +el.dataset.groups;
     const id  = el.id.replace('locus-','');
     const lbl = annotations[id] && annotations[id].label;
     let show  = true;
-    if      (mode==='split')    show = g===2;
-    else if (mode==='multi')    show = g>2;
-    else if (mode==='labeled')  show = lbl==='significant';
-    else if (mode==='unlabeled')show = !lbl || lbl==='possibly';
-    else if (mode==='not')      show = lbl==='not';
+    if      (mode==='split')       show = g===2;
+    else if (mode==='multi')       show = g>2;
+    else if (mode==='significant') show = lbl==='significant';
+    else if (mode==='possibly')    show = !lbl || lbl==='possibly';
+    else if (mode==='not')         show = lbl==='not';
     el.style.display = show ? '' : 'none';
   });
 }
 
-// ══════════════════════════════════════════════════════════ TABS
+// ── Tabs ─────────────────────────────────────────────────────────────────────
 
 function showTab(name, btn) {
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('collation-panel').style.display = name==='collation' ? 'flex' : 'none';
-  document.getElementById('Relation Network-panel').style.display    = name==='Relation Network'    ? 'flex' : 'none';
-  if (name==='Relation Network') {
+  document.getElementById('stemma-panel').style.display    = name==='stemma'    ? 'flex' : 'none';
+  if (name==='stemma') {
     setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
+      if (window._resizeStemma) window._resizeStemma();
       if (simRef) simRef.alpha(0.3).restart();
     }, 50);
   }
 }
 
-// ══════════════════════════════════════════════════════════ FILE LOADING
+// ── File loading ─────────────────────────────────────────────────────────────
 
 function processFile(text, filename) {
   document.getElementById('error-msg').textContent = '';
   try {
-    const { header, body } = loadEdition(text);
-    const titleInfo = header.title || {};
-    const bookName  = titleInfo.book_name || filename.replace(/\.txt$/i,'');
-    const editor    = titleInfo.editor || '';
-
-    const { symbols, labels, corrigenda } = getSigla(header);
+    const { header, body }                        = loadEdition(text);
+    const titleInfo                               = header.title || {};
+    const bookName                                = titleInfo.book_name || filename.replace(/\.txt$/i,'');
+    const editor                                  = titleInfo.editor || '';
+    const { symbols, labels, corrigenda }         = getSigla(header);
     const readings    = extractReadings(body, symbols);
     const locusGroups = groupLoci(readings, body);
     const loci        = buildLocusRecords(locusGroups, body);
@@ -943,37 +804,26 @@ function processFile(text, filename) {
     const singletons  = computeSingletons(loci);
     const splits      = computeSplits(loci);
 
-    // Persist state
-    STATE = { loci, pairs, singletons, splits, symbols, labels, corrigenda, bookName, nLoci: loci.length };
+    STATE    = { loci, pairs, singletons, splits, symbols, labels, corrigenda, bookName, nLoci: loci.length };
     STORE_KEY = 'annot_' + bookName.replace(/\s+/g,'_');
     try { annotations = JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); } catch(e) { annotations = {}; }
 
-    // Update header
     const corrList = [...corrigenda].join(', ');
-    document.getElementById('app-title').textContent = bookName;
+    document.getElementById('app-title').textContent    = bookName;
     document.getElementById('app-subtitle').textContent =
       `${editor ? editor + ' · ' : ''}${loci.length} variant loci · ${symbols.length} witnesses`
       + (corrList ? ` · corrigenda excluded: ${corrList}` : '');
 
-    // Render
     renderLoci(loci, labels, corrigenda);
     renderSidebar(symbols, labels, corrigenda, pairs, singletons, splits, loci.length);
-    buildRelation Network(symbols, labels, corrigenda, pairs, singletons, loci.length);
-
-    // Filter count labels
-    document.querySelector('.filter-btn').textContent = `All (${loci.length})`;
-
-    // Annotations
+    buildStemma(symbols, labels, corrigenda, pairs, singletons, loci.length);
     initAnnotations(loci);
 
-    // Switch screens
     document.getElementById('upload-screen').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
-
-    // Reset to collation tab
     document.querySelectorAll('.tab').forEach((b,i) => b.classList.toggle('active', i===0));
     document.getElementById('collation-panel').style.display = 'flex';
-    document.getElementById('Relation Network-panel').style.display    = 'none';
+    document.getElementById('stemma-panel').style.display    = 'none';
 
   } catch(err) {
     document.getElementById('error-msg').textContent = 'Error: ' + err.message;
@@ -988,11 +838,10 @@ function resetToUpload() {
   if (simRef) { simRef.stop(); simRef = null; }
 }
 
-// ══════════════════════════════════════════════════════════ FILE INPUT
+// ── File input ───────────────────────────────────────────────────────────────
 
 document.getElementById('file-input').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => processFile(ev.target.result, file.name);
   reader.readAsText(file, 'utf-8');
@@ -1003,8 +852,7 @@ dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('ov
 dz.addEventListener('dragleave', () => dz.classList.remove('over'));
 dz.addEventListener('drop', e => {
   e.preventDefault(); dz.classList.remove('over');
-  const file = e.dataTransfer.files[0];
-  if (!file) return;
+  const file = e.dataTransfer.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => processFile(ev.target.result, file.name);
   reader.readAsText(file, 'utf-8');
@@ -1012,3 +860,4 @@ dz.addEventListener('drop', e => {
 </script>
 </body>
 </html>
+
