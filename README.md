@@ -76,7 +76,13 @@ The current stemmatic network is computed from agreement rates across all varian
 ## Python companion tool
 
 The same collation logic is available as a Python script for batch processing and more advanced analysis:
-(...)
+
+```bash
+python3 mahadurot_collator.py edition.txt output.html
+```
+
+See [`mahadurot_collator.py`](https://github.com/rinahillmann/mahadurot-collation-editor/blob/main/scripts/mahadurot_collator.py) for the full toolkit.
+
 
 ---
 
