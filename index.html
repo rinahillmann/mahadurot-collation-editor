@@ -886,11 +886,14 @@ function filterLoci(mode, btn) {
 // ══════════════════════════════════════════════════════════ TABS
 
 function showTab(name, btn) {
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('collation-panel').style.display = name==='collation' ? 'flex' : 'none';
   document.getElementById('stemma-panel').style.display    = name==='stemma'    ? 'flex' : 'none';
-  if (name === 'stemma' && simRef) simRef.alpha(0.1).restart();
+  if (name==='stemma') {
+    window.dispatchEvent(new Event('resize'));
+    if (simRef) simRef.alpha(0.3).restart();
+  }
 }
 
 // ══════════════════════════════════════════════════════════ FILE LOADING
